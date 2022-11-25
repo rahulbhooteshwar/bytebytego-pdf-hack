@@ -1,27 +1,28 @@
-const clipBoardInput = document.createElement('input');
-clipBoardInput.setAttribute('class', 'clipBoardInput');
-clipBoardInput.setAttribute('readonly', 'true');
-document.body.prepend(clipBoardInput);
+window.initMyHack = () => {
+  const clipBoardInput = document.createElement('input');
+  clipBoardInput.setAttribute('class', 'clipBoardInput');
+  clipBoardInput.setAttribute('readonly', 'true');
+  document.body.prepend(clipBoardInput);
 
-const clipBoardLabel = document.createElement('label');
-clipBoardLabel.setAttribute('class', 'clipBoardLabel');
-clipBoardLabel.innerHTML = '📋 Copied to Clip Board';
-document.body.prepend(clipBoardLabel);
+  const clipBoardLabel = document.createElement('label');
+  clipBoardLabel.setAttribute('class', 'clipBoardLabel');
+  clipBoardLabel.innerHTML = '📋 Copied to Clip Board';
+  document.body.prepend(clipBoardLabel);
 
-function copyPageTitleToClipBoard(text) {
-  var copyText =
-    text ||
-    document
-      .querySelector('.ant-menu-item.ant-menu-item-selected.ant-menu-item-only-child')
-      ?.innerText.replace(/\n/g, ' ') ||
-    document.title;
-  clipBoardInput.value = copyText;
-  clipBoardInput.select();
-  document.execCommand('copy');
-}
+  function copyPageTitleToClipBoard(text) {
+    var copyText =
+      text ||
+      document
+        .querySelector('.ant-menu-item.ant-menu-item-selected.ant-menu-item-only-child')
+        ?.innerText.replace(/\n/g, ' ') ||
+      document.title;
+    clipBoardInput.value = copyText;
+    clipBoardInput.select();
+    document.execCommand('copy');
+  }
 
-const style = document.createElement('style');
-style.innerHTML = `
+  const style = document.createElement('style');
+  style.innerHTML = `
 body {
   position:relative;
 }
@@ -93,37 +94,37 @@ section.ant-layout-has-sider{
   @page { margin: 2cm }
 }
 `;
-document.head.append(style);
-const jqueryScript = document.createElement('script');
-jqueryScript.setAttribute('src', 'https://code.jquery.com/jquery-3.6.1.min.js');
+  document.head.append(style);
+  const jqueryScript = document.createElement('script');
+  jqueryScript.setAttribute('src', 'https://code.jquery.com/jquery-3.6.1.min.js');
 
-// jqueryScript.setAttribute('onload','smoothScrollAndPrint()');
+  // jqueryScript.setAttribute('onload','smoothScrollAndPrint()');
 
-document.head.appendChild(jqueryScript);
+  document.head.appendChild(jqueryScript);
 
-const smoothScrollAndPrint = () => {
-  $('html,body')
-    .animate({ scrollTop: $(document).height() }, 15000)
-    .promise()
-    .done(() => {
-      console.log('scrolling complete....printing now');
+  const smoothScrollAndPrint = () => {
+    $('html,body')
+      .animate({ scrollTop: $(document).height() }, 15000)
+      .promise()
+      .done(() => {
+        console.log('scrolling complete....printing now');
 
-      window.print();
+        window.print();
+      });
+  };
+
+  const printCTA = document.createElement('button');
+  printCTA.innerHTML = '🖨 PRINT';
+  printCTA.setAttribute('onclick', 'smoothScrollAndPrint()');
+  printCTA.setAttribute('class', 'print-cta');
+
+  document.body.prepend(printCTA);
+
+  Array.from(document.querySelectorAll('.ant-menu-title-content')).forEach((item) => {
+    item.addEventListener('click', (event) => {
+      copyPageTitleToClipBoard(item.innerText.replace(/\n/g, ' '));
     });
-};
-
-const printCTA = document.createElement('button');
-printCTA.innerHTML = '🖨 PRINT';
-printCTA.setAttribute('onclick', 'smoothScrollAndPrint()');
-printCTA.setAttribute('class', 'print-cta');
-
-document.body.prepend(printCTA);
-
-Array.from(document.querySelectorAll('.ant-menu-title-content')).forEach((item) => {
-  item.addEventListener('click', (event) => {
-    copyPageTitleToClipBoard(item.innerText.replace(/\n/g, ' '));
   });
-});
 
-copyPageTitleToClipBoard();
-
+  copyPageTitleToClipBoard();
+};
